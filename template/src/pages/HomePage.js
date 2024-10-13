@@ -1,10 +1,54 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+
+import Slider from "react-slick";  // Import Slider from react-slick
+
+// Import Slick CSS
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+
+
+// Custom Arrow Components
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "gray", right: "10px" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "gray", left: "10px", zIndex: 1 }}
+      onClick={onClick}
+    />
+  );
+}
 
 /** 
  * It's just a draft
  */
 function HomePage() {
+
+  // Settings for the carousel
+  const settings = {
+    dots: true, // Show dots for navigation
+    infinite: true, // Infinite looping of slides
+    speed: 500, // Transition speed
+    slidesToShow: 1, // Number of slides to show at once
+    slidesToScroll: 1, // Scroll one slide at a time
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />
+  };
+
   return (
     <div>
       {/* Navigation Bar */}
@@ -15,12 +59,35 @@ function HomePage() {
           <Link to="/recommended-ads" className="text-blue-500 hover:underline">Recommended Ads</Link>
           <Link to="/" className="text-blue-500 hover:underline">Home</Link>
         </div>
-        <div className="flex items-center">
-          <Link to="/cart" className="text-blue-500 hover:underline">
-            <i className="fas fa-shopping-cart"></i> Cart (0)
+        <div className="flex items-center space-x-4">
+          {/* Search Bar */}
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            className="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+          />
+          {/* Cart */}
+          <Link to="/cart" className="text-blue-500 hover:underline flex items-center">
+            <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> {/* Cart Icon */}
+            Cart (0)
           </Link>
         </div>
       </nav>
+
+      {/* Carousel Section */}
+      <section className="carousel-section">
+        <Slider {...settings}>
+          <div>
+            <img src="path_to_image1.jpg" alt="Slide 1" className="w-full" />
+          </div>
+          <div>
+            <img src="path_to_image2.jpg" alt="Slide 2" className="w-full" />
+          </div>
+          <div>
+            <img src="path_to_image3.jpg" alt="Slide 3" className="w-full" />
+          </div>
+        </Slider>
+      </section>
 
       {/* Main Content */}
       <main className="p-8">
