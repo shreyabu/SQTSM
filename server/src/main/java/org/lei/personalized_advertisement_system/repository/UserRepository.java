@@ -11,11 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> , JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
     @Modifying
     @Transactional
     @Query(value = "TRUNCATE TABLE users", nativeQuery = true)
     void truncateTable();
+
     Optional<User> findByUsername(String username);
 }
 

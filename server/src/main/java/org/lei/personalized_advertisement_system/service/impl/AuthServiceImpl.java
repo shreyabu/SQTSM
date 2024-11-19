@@ -1,10 +1,12 @@
-package org.lei.personalized_advertisement_system.service;
+package org.lei.personalized_advertisement_system.service.impl;
 
 import org.lei.personalized_advertisement_system.DTO.TokenDTO;
 import org.lei.personalized_advertisement_system.DTO.UserLoginDTO;
 import org.lei.personalized_advertisement_system.DTO.UserRegisterDTO;
 import org.lei.personalized_advertisement_system.entity.User;
 import org.lei.personalized_advertisement_system.enums.Role;
+import org.lei.personalized_advertisement_system.service.AuthService;
+import org.lei.personalized_advertisement_system.service.UserService;
 import org.lei.personalized_advertisement_system.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

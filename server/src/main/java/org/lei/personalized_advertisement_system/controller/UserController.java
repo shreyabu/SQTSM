@@ -1,6 +1,6 @@
 package org.lei.personalized_advertisement_system.controller;
 
-import org.lei.personalized_advertisement_system.service.UserServiceImpl;
+import org.lei.personalized_advertisement_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam String username) {
