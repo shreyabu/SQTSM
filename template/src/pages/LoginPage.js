@@ -1,20 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import api from '../api/api';
 
 function LoginPage({ setIsAuthenticated }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === 'user' && password === 'password') {
-      setIsAuthenticated(true)
-      toast.success('Welcom Back!')
+  
+    try {
+      const response = await api.post('/auth/login', {
+        username,
+        password,
+      });
+  
+      setIsAuthenticated(true);
+      sessionStorage.setItem('token', response.data.token);
+      toast.success('Welcome Back!');
       navigate('/');
-    } else {
-      toast.error('Wrong username or password, try again!')
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.error || 'Login failed, try again!');
+      } else {
+        toast.error('Network error, please try again later!');
+      }
+      console.error('Error during login:', error);
     }
   };
 

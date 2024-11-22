@@ -53,7 +53,7 @@ function HomePage() {
     <div>
       {/* Navigation Bar */}
       <nav className="bg-gray-100 p-4 shadow-md flex justify-between items-center">
-        <div className="text-lg font-bold">SQTSM</div>
+        <div className="text-lg font-bold">personalized_advertisement_system</div>
         <div className="flex space-x-4">
           <Link to="/preferences" className="text-blue-500 hover:underline">My Preferences</Link>
           <Link to="/recommended-ads" className="text-blue-500 hover:underline">Recommended Ads</Link>
