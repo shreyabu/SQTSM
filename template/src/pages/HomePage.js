@@ -114,27 +114,27 @@ function HomePage() {
             <div><img src={FinalSaleImage} alt="Slide 3" className="w-full h-[600px] max-object-cover" /></div>
           </Slider>
           {/* Overlaying Product Grid */}
-        <div className="top-20 left-0 w-full">
+          <div className="top-20 left-0 w-full">
           <div className="grid grid-cols-3 gap-6 px-8">
-            {[
-              { name: 'Bag', price: '$30', image: BagImage, discount: '29% off', link: '/products/bag' },
-              { name: 'Shoes', price: '$50', image: ShoesImage, discount: '15% off', link: '/products/shoes' },
-              { name: 'Watch', price: '$120', image: WatchImage, discount: '20% off', link: '/products/watch' },
+            {[ // Array of products
+              { id: 1, name: 'Bag', price: '$30', image: BagImage, discount: '29% off' },
+              { id: 2, name: 'Shoes', price: '$50', image: ShoesImage, discount: '15% off' },
+              { id: 3, name: 'Watch', price: '$120', image: WatchImage, discount: '20% off' },
             ].map((product, index) => (
               <div key={index} className="bg-white border p-4 rounded-lg shadow-lg text-center">
-                {/* Make the image clickable */}
-              <Link to={product.link}>
-                <img src={product.image} alt={product.name} className="w-full h-60 object-cover rounded-lg mb-4 hover:opacity-75" />
-              </Link>
-              
-              {/* Make the name clickable */}
-              <Link to={product.link} className="text-lg font-bold text-blue-500 hover:underline">
-                {product.name}
-              </Link>
+                {/* Make the image clickable, navigate to the product page dynamically */}
+                <Link to={`/product/${product.id}`}>
+                  <img src={product.image} alt={product.name} className="w-full h-60 object-cover rounded-lg mb-4 hover:opacity-75" />
+                </Link>
 
-              <p className="text-sm text-gray-500">{product.discount}</p>
-              <p className="text-xl font-semibold text-blue-500">{product.price}</p>
-            </div>
+                {/* Make the name clickable, navigate to the product page dynamically */}
+                <Link to={`/product/${product.id}`} className="text-lg font-bold text-blue-500 hover:underline">
+                  {product.name}
+                </Link>
+
+                <p className="text-sm text-gray-500">{product.discount}</p>
+                <p className="text-xl font-semibold text-blue-500">{product.price}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -159,25 +159,25 @@ function HomePage() {
           <section>
           <h2 className="text-2xl mb-4 font-semibold">Advertisements</h2>
           <div className="grid grid-cols-3 gap-6">
-            {[
-              { name: 'Gym Dumbbell', price: '$30', description: 'Attributes', image: GymDumbbellImage, link: '/products/gymdumbbell' },
-              { name: 'Bag', price: '$30', description: 'Attributes', image: LeatherBagImage, link: '/products/bag' }
-            ].map((ad, index) => (
+            {[ // Array of advertisements
+              { id: 4, name: 'Gym Dumbbell', price: '$30', description: 'Attributes', image: GymDumbbellImage },
+              { id: 5, name: 'Bag', price: '$30', description: 'Attributes', image: LeatherBagImage }
+            ].map((product, index) => (
               <div key={index} className="border p-4 rounded-lg shadow-md">
-                {/* Wrap image and name in a Link to navigate to the product page */}
-                <Link to={ad.link}>
+                {/* Wrap image and name in a Link to navigate to the product page dynamically */}
+                <Link to={`/product/${product.id}`}>
                   {/* Product Image */}
                   <img
-                    src={ad.image}
-                    alt={ad.name}
+                    src={product.image}
+                    alt={product.name}
                     className="w-full h-40 object-cover rounded-lg mb-4 hover:opacity-75"
                   />
                   {/* Product Name */}
-                  <h3 className="text-lg font-semibold text-blue-500 hover:underline">{ad.name}</h3>
+                  <h3 className="text-lg font-semibold text-blue-500 hover:underline">{product.name}</h3>
                 </Link>
 
-                <p className="text-sm text-gray-500">{ad.description}</p>
-                <p className="text-lg font-bold">{ad.price}</p>
+                <p className="text-sm text-gray-500">{product.description}</p>
+                <p className="text-lg font-bold">{product.price}</p>
               </div>
             ))}
           </div>
