@@ -109,12 +109,12 @@ function HomePage() {
         {/* Carousel Section */}
         <section className="carousel-section mb-6">
           <Slider {...settings}>
-            <div><img src={fashionSaleImage} alt="Slide 1" className="w-full h-96 object-cover" /></div>
-            <div><img src={BlackFridaySaleImage} alt="Slide 2" className="w-full h-96 object-cover" /></div>
-            <div><img src={FinalSaleImage} alt="Slide 3" className="w-full h-96 object-cover" /></div>
+            <div><img src={fashionSaleImage} alt="Slide 1" className="w-full h-[600px] object-cover" /></div>
+            <div><img src={BlackFridaySaleImage} alt="Slide 2" className="w-full h-[600px] object-cover" /></div>
+            <div><img src={FinalSaleImage} alt="Slide 3" className="w-full h-[600px] max-object-cover" /></div>
           </Slider>
           {/* Overlaying Product Grid */}
-        <div className="absolute top-32 left-0 w-full">
+        <div className="top-20 left-0 w-full">
           <div className="grid grid-cols-3 gap-6 px-8">
             {[
               { name: 'Bag', price: '$30', image: BagImage, discount: '29% off', link: '/products/bag' },
