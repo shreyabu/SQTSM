@@ -24,11 +24,20 @@ function ProductDetails() {
   }
 
   return (
-    <div className="product-details">
-      <img src={product.image} alt={product.name} className="w-full h-96 object-cover" />
-      <h1 className="text-3xl font-bold">{product.name}</h1>
-      <p className="text-xl font-semibold text-blue-500">{product.price}</p>
-      <p className="text-lg">{product.description}</p>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+      <div className="flex flex-col md:flex-row items-center">
+        {/* Ensure image displays correctly */}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full md:w-1/2 max-h-[500px] object-cover rounded-lg mb-4 md:mb-0"
+        />
+        <div className="md:ml-8">
+          <p className="text-gray-600 mb-4">{product.description}</p>
+          <p className="text-xl font-semibold text-blue-500">{product.price}</p>
+        </div>
+      </div>
     </div>
   );
 }
