@@ -8,6 +8,12 @@ import "slick-carousel/slick/slick-theme.css";
 import fashionSaleImage from '../images/Fashionsale.jpg';
 import BlackFridaySaleImage from '../images/BlackFridaySale.jpg';
 import FinalSaleImage from '../images/FinalSale.jpg';
+import BagImage from '../images/Bag.jpg';
+import ShoesImage from '../images/Shoes.jpg';
+import WatchImage from '../images/Watch.jpg';
+import LeatherBagImage from '../images/Leatherbag.jpg';
+import GymDumbbellImage from '../images/GymDumbbell.jpg';
+
 
 const categories = [
   { name: 'Electronics', link: '/products/electronics' },
@@ -111,14 +117,14 @@ function HomePage() {
         <div className="absolute top-32 left-0 w-full">
           <div className="grid grid-cols-3 gap-6 px-8">
             {[
-              { name: 'Bag', price: '$30', image: 'path_to_bag_image.jpg', discount: '29% off', link: '/products/bag' },
-              { name: 'Shoes', price: '$50', image: 'path_to_shoes_image.jpg', discount: '15% off', link: '/products/shoes' },
-              { name: 'Watch', price: '$120', image: 'path_to_watch_image.jpg', discount: '20% off', link: '/products/watch' },
+              { name: 'Bag', price: '$30', image: BagImage, discount: '29% off', link: '/products/bag' },
+              { name: 'Shoes', price: '$50', image: ShoesImage, discount: '15% off', link: '/products/shoes' },
+              { name: 'Watch', price: '$120', image: WatchImage, discount: '20% off', link: '/products/watch' },
             ].map((product, index) => (
               <div key={index} className="bg-white border p-4 rounded-lg shadow-lg text-center">
                 {/* Make the image clickable */}
               <Link to={product.link}>
-                <img src={product.image} alt={product.name} className="w-full h-40 object-cover rounded-lg mb-4 hover:opacity-75" />
+                <img src={product.image} alt={product.name} className="w-full h-60 object-cover rounded-lg mb-4 hover:opacity-75" />
               </Link>
               
               {/* Make the name clickable */}
@@ -151,17 +157,31 @@ function HomePage() {
 
           {/* Advertisement Grid */}
           <section>
-            <h2 className="text-2xl mb-4 font-semibold">Advertisements</h2>
-            <div className="grid grid-cols-3 gap-6">
-              {[{ name: 'Gym', price: '$30', description: 'Attributes' }, { name: 'Bag', price: '$30', description: 'Attributes' }].map((ad, index) => (
-                <div key={index} className="border p-4 rounded-lg shadow-md">
+          <h2 className="text-2xl mb-4 font-semibold">Advertisements</h2>
+          <div className="grid grid-cols-3 gap-6">
+            {[
+              { name: 'Gym Dumbbell', price: '$30', description: 'Attributes', image: GymDumbbellImage, link: '/products/gymdumbbell' },
+              { name: 'Bag', price: '$30', description: 'Attributes', image: LeatherBagImage, link: '/products/bag' }
+            ].map((ad, index) => (
+              <div key={index} className="border p-4 rounded-lg shadow-md">
+                {/* Wrap image and name in a Link to navigate to the product page */}
+                <Link to={ad.link}>
+                  {/* Product Image */}
+                  <img
+                    src={ad.image}
+                    alt={ad.name}
+                    className="w-full h-40 object-cover rounded-lg mb-4 hover:opacity-75"
+                  />
+                  {/* Product Name */}
                   <h3 className="text-lg font-semibold text-blue-500 hover:underline">{ad.name}</h3>
-                  <p className="text-sm text-gray-500">{ad.description}</p>
-                  <p className="text-lg font-bold">{ad.price}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+                </Link>
+
+                <p className="text-sm text-gray-500">{ad.description}</p>
+                <p className="text-lg font-bold">{ad.price}</p>
+              </div>
+            ))}
+          </div>
+        </section>
         </main>
       </div>
     </div>
