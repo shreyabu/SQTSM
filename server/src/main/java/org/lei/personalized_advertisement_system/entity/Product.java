@@ -2,7 +2,6 @@ package org.lei.personalized_advertisement_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,19 +21,12 @@ public class Product {
 
     private Double price;
 
-    private String category;
+    private String image;
 
-    private LocalDateTime createdAt;
+    @Lob
+    private String categories;
 
-    private LocalDateTime updatedAt;
+    private Integer sales = 0;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    private Double rating;
 }

@@ -1,17 +1,19 @@
 package org.lei.personalized_advertisement_system.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ProductDTO {
+@AllArgsConstructor
+public class AdDTO {
     private Long id;
-    private String name;
+    private String title;
     private String description;
-    private Double price;
     private String image;
     private List<String> categories;
-    private Integer sales;
-    private Double rating;
+    private Double price;
+    private Integer clicks;
 }
+

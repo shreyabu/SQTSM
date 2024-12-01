@@ -2,11 +2,13 @@ package org.lei.personalized_advertisement_system.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.lei.personalized_advertisement_system.DTO.UserDetailsDTO;
+import org.lei.personalized_advertisement_system.entity.Product;
 import org.lei.personalized_advertisement_system.entity.User;
 import org.lei.personalized_advertisement_system.enums.Role;
 import org.lei.personalized_advertisement_system.repository.UserRepository;
 import org.lei.personalized_advertisement_system.service.UserService;
 import org.lei.personalized_advertisement_system.util.JwtUtil;
+import org.lei.personalized_advertisement_system.util.StringToListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Service class for managing users in the application.
@@ -77,6 +79,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User with username " + username + " not found!"));
     }
 
+    @Override
+    public List<String> getPreferencesByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        return StringToListUtil.toList(user.getPreferences());
+    }
+
 
     /**
      * Retrieves the currently authenticated user based on the JWT token from the request.
@@ -99,6 +108,23 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void updateUserPreferences(List<Product> products) {
+        User user = getCurrentUser();
+        Set<String> preferences = new HashSet<>();
+        if (user.getPreferences() != null && !user.getPreferences().isEmpty()) {
+            preferences.addAll(StringToListUtil.toList(user.getPreferences()));
+        }
+
+        for (Product product : products) {
+            if (product.getCategories() != null) {
+                preferences.addAll(StringToListUtil.toList(product.getCategories()));
+            }
+        }
+        user.setPreferences(String.join(",", preferences));
+        userRepository.save(user);
+    }
+
     /**
      * Implements UserDetails load by username for Spring Security.
      *
@@ -119,9 +145,10 @@ public class UserServiceImpl implements UserService {
      * @return a UserDetailsDTO containing the user's information
      */
     private UserDetailsDTO convertUserToUserDetailsDTO(User user) {
-        UserDetailsDTO userListDTO = new UserDetailsDTO();
-        userListDTO.setUsername(user.getUsername());
-        userListDTO.setRole(user.getRole());
-        return userListDTO;
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUsername(user.getUsername());
+        userDetailsDTO.setRole(user.getRole());
+        userDetailsDTO.setPreferences(StringToListUtil.toList(user.getPreferences()));
+        return userDetailsDTO;
     }
 }

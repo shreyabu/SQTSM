@@ -9,7 +9,6 @@ import org.lei.personalized_advertisement_system.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -21,7 +20,7 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -33,21 +32,13 @@ public class User implements UserDetails {
     private Role role;
 
     @Lob
-    @Column(columnDefinition = "TEXT")
     private String preferences;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    public User(String username, String password, String preferences) {
+        this.username = username;
+        this.password = password;
+        this.role = Role.CUSTOMER;
+        this.preferences = preferences;
     }
 
     @Override
