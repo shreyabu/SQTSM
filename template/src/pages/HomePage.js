@@ -16,12 +16,12 @@ import GymDumbbellImage from '../images/GymDumbbell.jpg';
 
 
 const categories = [
-  { name: 'Electronics', link: '/products/electronics' },
-  { name: 'Fashion', link: '/products/fashion' },
-  { name: 'Home & Kitchen', link: '/products/home-kitchen' },
-  { name: 'Books', link: '/products/books' },
-  { name: 'Toys', link: '/products/toys' },
-  { name: 'Sports', link: '/products/sports' },
+  { name: 'Electronics', link: '/category/electronics' },
+  { name: 'Fashion', link: '/category/fashion' },
+  { name: 'Home & Kitchen', link: '/category/home-kitchen' },
+  { name: 'Books', link: '/category/books' },
+  { name: 'Toys', link: '/category/toys' },
+  { name: 'Sports', link: '/category/sports' },
 ];
 
 function SampleNextArrow(props) {

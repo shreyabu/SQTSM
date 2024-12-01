@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
 import ProductDetails from './pages/ProductDetails';
+import CategoryPage from './pages/CategoryPage'; // Import the new CategoryPage component
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -28,6 +29,10 @@ function App() {
         <Route
           path="/product/:id"  // Define route for Product Details
           element={<ProductDetails />}  // Component to show product details
+        />
+        <Route
+          path="/category/:categoryName"  // Route for Category Pages
+          element={<CategoryPage />}  // Component to show products by category
         />
       </Routes>
       <ToastContainer
