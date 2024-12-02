@@ -5,15 +5,17 @@ import Slider from 'react-slick';
 function HomePage() {
   const [ads, setAds] = useState([]);
   const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState('');
 
   // Fetch data from the backend
   useEffect(() => {
     api
       .get('/')
       .then((response) => {
-        const { ads, products } = response.data;
+        const { ads, products, message } = response.data;
         setAds(ads);
         setProducts(products);
+        setMessage(message);
       })
       .catch((error) => {
         console.error('Failed to fetch home page data:', error);

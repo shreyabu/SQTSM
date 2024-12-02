@@ -35,7 +35,7 @@ public class SecurityConfig {
                 // Authorize requests configuration
                 .authorizeHttpRequests(auth -> auth
                         // Permit all requests to certain URLs without authentication
-                        .requestMatchers("/","/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/", "/auth/login", "/auth/register", "/categories").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated());
         // Disable CSRF protection, typically for API services where tokens are used instead of cookies.
