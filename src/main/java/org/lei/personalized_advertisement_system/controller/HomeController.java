@@ -33,7 +33,7 @@ public class HomeController {
         if (token != null && !token.isBlank()) {
             String username = userService.getCurrentUser().getUsername();
             if (username != null) {
-                ads = adService.getRecommendedAds(username);
+                ads = adService.getRecommendedAds();
                 products = productService.getRecommendedProducts(username);
                 return ResponseEntity.ok(new HomePageDTO(ads, products, "Welcome back, " + username + "!"));
             }
@@ -44,16 +44,5 @@ public class HomeController {
         return ResponseEntity.ok(new HomePageDTO(ads, products, "Explore popular ads and products!"));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<AdDTO>> searchAds(@RequestParam String query) {
-        List<AdDTO> results = adService.searchAds(query);
-        return ResponseEntity.ok(results);
-    }
-
-    @PostMapping("/click/{adId}")
-    public ResponseEntity<?> recordAdClick(@PathVariable Long adId) {
-        adService.recordClick(adId);
-        return ResponseEntity.ok("Ad click recorded.");
-    }
 }
 

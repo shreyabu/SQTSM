@@ -1,5 +1,6 @@
 package org.lei.personalized_advertisement_system.service.impl;
 
+import org.lei.personalized_advertisement_system.DTO.LoggedInUserDTO;
 import org.lei.personalized_advertisement_system.DTO.TokenDTO;
 import org.lei.personalized_advertisement_system.DTO.UserLoginDTO;
 import org.lei.personalized_advertisement_system.DTO.UserRegisterDTO;
@@ -35,10 +36,10 @@ public class AuthServiceImpl implements AuthService {
      * @throws RuntimeException If the username or password is incorrect.
      */
     @Override
-    public TokenDTO login(UserLoginDTO loginUser) {
+    public LoggedInUserDTO login(UserLoginDTO loginUser) {
         try {
             authManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
-            return jwtUtil.createTokenJson(loginUser.getUsername());
+            return new LoggedInUserDTO(userService.getUserDetailsByUsername(loginUser.getUsername()), jwtUtil.createToken(loginUser.getUsername()));
         } catch (Exception e) {
             throw new RuntimeException("Username or password is incorrect!");
         }
@@ -51,13 +52,13 @@ public class AuthServiceImpl implements AuthService {
      * @return A {@link TokenDTO} containing the JWT token for the newly registered user.
      */
     @Override
-    public TokenDTO register(UserRegisterDTO registerUser) {
+    public LoggedInUserDTO register(UserRegisterDTO registerUser) {
         User newUser = new User();
         newUser.setUsername(registerUser.getUsername());
         newUser.setPassword(registerUser.getPassword());
         newUser.setRole(Role.CUSTOMER);
         newUser.setPreferences(String.join(",", registerUser.getPreferences()));
         User user = userService.addUser(newUser);
-        return jwtUtil.createTokenJson(user.getUsername());
+        return new LoggedInUserDTO(userService.getUserDetailsByUsername(user.getUsername()), jwtUtil.createToken(user.getUsername()));
     }
 }

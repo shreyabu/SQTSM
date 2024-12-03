@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../api/api';
+import CategorySelect from '../components/CategorySelect';
 
 function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -12,6 +13,7 @@ function SignUpPage() {
 
   const navigate = useNavigate();
 
+  // Fetch categories for preferences
   useEffect(() => {
     api
       .get('/categories')
@@ -24,6 +26,7 @@ function SignUpPage() {
       });
   }, []);
 
+  // Handle user registration
   const handleSignUp = async (e) => {
     e.preventDefault();
 
@@ -38,10 +41,15 @@ function SignUpPage() {
         password,
         preferences: selectedPreferences,
       });
+
       if (response.status === 200 || response.status === 201) {
-        sessionStorage.setItem('token', response.data.token);
-        toast.success('Registration successful!');
-        navigate('/');
+        // Save user info and token to localStorage
+        const { user, token } = response.data;
+        localStorage.setItem('loggedInUser', JSON.stringify(user));
+        localStorage.setItem('token', token);
+
+        toast.success(`Welcom to join us ${user.username}`);
+        navigate('/'); // Redirect to home page
       }
     } catch (error) {
       console.error(error);

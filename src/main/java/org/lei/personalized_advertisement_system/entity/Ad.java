@@ -3,6 +3,9 @@ package org.lei.personalized_advertisement_system.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -25,15 +28,23 @@ public class Ad {
     @Lob
     private String categories;
 
-    private Double price;
-
     private Integer clicks = 0;
 
-    public Ad(String title, String description, Double price, String categories) {
+    @ManyToMany
+    @JoinTable(
+            name = "ad_products",
+            joinColumns = @JoinColumn(name = "ad_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private Set<Product> products;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public Ad(String title, String description,String image, String categories, Set<Product> products) {
         this.title = title;
         this.description = description;
-        this.price = price;
+        this.image = image;
         this.categories = categories;
+        this.products = products;
     }
 }
-

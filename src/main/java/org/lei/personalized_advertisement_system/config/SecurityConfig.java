@@ -3,6 +3,7 @@ package org.lei.personalized_advertisement_system.config;
 import org.lei.personalized_advertisement_system.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -36,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Permit all requests to certain URLs without authentication
                         .requestMatchers("/", "/auth/login", "/auth/register", "/categories").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated());
         // Disable CSRF protection, typically for API services where tokens are used instead of cookies.

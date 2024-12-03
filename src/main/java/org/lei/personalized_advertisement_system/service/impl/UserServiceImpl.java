@@ -70,10 +70,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDetailsDTO getUserDetailsByUsername(String username) {
-        if (getCurrentUser().getRole() == Role.CUSTOMER) {
-            throw new RuntimeException("You do not have permission to load this user!");
-        }
-
         return userRepository.findByUsername(username)
                 .map(this::convertUserToUserDetailsDTO)
                 .orElseThrow(() -> new RuntimeException("User with username " + username + " not found!"));
@@ -109,18 +105,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserPreferences(List<Product> products) {
+    public void updateUserPreferences(Set<String> preferences) {
         User user = getCurrentUser();
-        Set<String> preferences = new HashSet<>();
         if (user.getPreferences() != null && !user.getPreferences().isEmpty()) {
             preferences.addAll(StringToListUtil.toList(user.getPreferences()));
         }
-
-        for (Product product : products) {
-            if (product.getCategories() != null) {
-                preferences.addAll(StringToListUtil.toList(product.getCategories()));
-            }
-        }
+        System.out.println(preferences);
         user.setPreferences(String.join(",", preferences));
         userRepository.save(user);
     }

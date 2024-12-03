@@ -21,6 +21,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(unique = true, nullable = false) // 确保订单号唯一且不能为空
+    private String orderNumber;
+
     private Double totalPrice;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

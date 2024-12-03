@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AdRepository extends JpaRepository<Ad, Long> {
-    List<Ad> findTop10ByOrderByClicksDesc();
-    List<Ad> findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String title, String description);
+    List<Ad> findTop5ByOrderByClicksDesc();
 }

@@ -17,9 +17,12 @@ function LoginPage({ setIsAuthenticated }) {
         password,
       });
   
+      const {user, token} = response.data;
       setIsAuthenticated(true);
-      sessionStorage.setItem('token', response.data.token);
-      toast.success('Welcome Back!');
+      localStorage.setItem('token', token);
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      console.log(localStorage.getItem('loggedInUser'));
+      toast.success(`Welcome Back ${user.username}!`);
       navigate('/');
     } catch (error) {
       if (error.response && error.response.data) {

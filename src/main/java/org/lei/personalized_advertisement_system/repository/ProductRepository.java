@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
-    List<Product> findTop10ByOrderBySalesDesc();
+    List<Product> findTop12ByOrderBySalesDesc();
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class OrderDTO {
-    private Long id;
+    private String orderNumber;
     private String username;
     private Double totalPrice;
     private List<OrderItemDTO> items;

@@ -1,12 +1,17 @@
 package org.lei.personalized_advertisement_system.service.impl;
 
+import org.lei.personalized_advertisement_system.DTO.ProductCreateDTO;
 import org.lei.personalized_advertisement_system.DTO.ProductDTO;
+import org.lei.personalized_advertisement_system.DTO.ProductUpdateDTO;
 import org.lei.personalized_advertisement_system.entity.Product;
 import org.lei.personalized_advertisement_system.repository.ProductRepository;
 import org.lei.personalized_advertisement_system.service.ProductService;
 import org.lei.personalized_advertisement_system.service.UserService;
 import org.lei.personalized_advertisement_system.util.StringToListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,18 +27,25 @@ public class ProductServiceImpl implements ProductService {
     private UserService userService;
 
     @Override
-    public Product addProduct(Product product) {
-        return productRepository.save(product);
+    public ProductDTO addProduct(ProductCreateDTO product) {
+        Product newProduct = new Product();
+        newProduct.setName(product.getName());
+        newProduct.setDescription(product.getDescription());
+        newProduct.setPrice(product.getPrice());
+        newProduct.setCategories(String.join(",", product.getCategories()));
+        newProduct.setImage(product.getImage());
+        return convertToProductDTO(productRepository.save(newProduct));
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        Product existingProduct = productRepository.findById(id)
+    public Product updateProduct(ProductUpdateDTO product) {
+        Product existingProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         existingProduct.setName(product.getName());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
-        existingProduct.setCategories(product.getCategories());
+        existingProduct.setImage(product.getImage());
+        existingProduct.setCategories(String.join(",", product.getCategories()));
         return productRepository.save(existingProduct);
     }
 
@@ -43,8 +55,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Page<ProductDTO> getAllProducts(Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return productRepository.findAll(pageRequest).map(this::convertToProductDTO);
+    }
+
+    @Override
     public List<Product> getAllProducts() {
-        return productRepository.findAll();
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @Override
@@ -52,24 +70,24 @@ public class ProductServiceImpl implements ProductService {
         List<String> preferences = userService.getPreferencesByUsername(username);
 
         if (preferences == null || preferences.isEmpty()) {
-            return productRepository.findTop10ByOrderBySalesDesc().stream()
-                    .map(this::convertProductToProductDTO)
+            return productRepository.findTop12ByOrderBySalesDesc().stream()
+                    .map(this::convertToProductDTO)
                     .collect(Collectors.toList());
         }
 
         return productRepository.findAll().stream()
                 .filter(product -> preferences.stream().anyMatch(product.getCategories()::contains))
-                .map(this::convertProductToProductDTO)
+                .map(this::convertToProductDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getPopularProducts() {
-        List<Product> popularProducts = productRepository.findTop10ByOrderBySalesDesc();
+        List<Product> popularProducts = productRepository.findTop12ByOrderBySalesDesc();
 
         // 转换为 DTO 列表返回
         return popularProducts.stream()
-                .map(this::convertProductToProductDTO)
+                .map(this::convertToProductDTO)
                 .toList();
     }
 
@@ -80,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO convertProductToProductDTO(Product product) {
+    public ProductDTO convertToProductDTO(Product product) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setId(product.getId());
         productDTO.setName(product.getName());

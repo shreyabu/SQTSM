@@ -3,6 +3,8 @@ package org.lei.personalized_advertisement_system.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -29,4 +31,6 @@ public class Product {
     private Integer sales = 0;
 
     private Double rating;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

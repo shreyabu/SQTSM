@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
+import CartPage from './pages/CartPage';
+import AdminDashboard from './pages/AdminDashboard';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -21,8 +24,17 @@ function App() {
         />
         <Route
           path="/"
-          element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
+          element={<HomePage />}
         />
+        <Route
+          path="/profile"
+          element={<ProfilePage />}
+        />
+        <Route
+          path="/cart"
+          element={<CartPage />}
+        />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <ToastContainer
         position="top-center"
