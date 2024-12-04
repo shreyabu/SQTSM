@@ -36,7 +36,9 @@ public class SecurityConfig {
                 // Authorize requests configuration
                 .authorizeHttpRequests(auth -> auth
                         // Permit all requests to certain URLs without authentication
-                        .requestMatchers("/", "/auth/login", "/auth/register", "/categories").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/categories", "/ad/click/{id}", "/ad/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/ad/click/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Require authentication for all other requests
                         .anyRequest().authenticated());

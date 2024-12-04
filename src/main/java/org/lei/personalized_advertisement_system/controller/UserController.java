@@ -19,8 +19,8 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserDetailsByUsername(username));
     }
 
-    @GetMapping("/show")
-    public ResponseEntity<?> userShow() {
+    @GetMapping
+    public ResponseEntity<?> getUserDetails() {
         return ResponseEntity.ok(userService.getCurrentUserDetails());
     }
 

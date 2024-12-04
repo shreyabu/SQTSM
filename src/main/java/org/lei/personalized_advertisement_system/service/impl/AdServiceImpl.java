@@ -110,6 +110,14 @@ public class AdServiceImpl implements AdService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void incrementAdClicks(Long adId) {
+        Ad ad = adRepository.findById(adId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ad with id " + adId + " not found"));
+        ad.setClicks(ad.getClicks() + 1);
+        adRepository.save(ad);
+    }
+
     private Ad mapToEntity(AdDTO adDTO) {
         Ad ad = new Ad();
         ad.setId(adDTO.getId());

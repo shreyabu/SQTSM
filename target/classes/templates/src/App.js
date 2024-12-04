@@ -5,6 +5,7 @@ import SignUpPage from './pages/SignUpPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import CartPage from './pages/CartPage';
+import AdDetailsPage from './pages/AdDetailsPage';
 import AdminDashboard from './pages/AdminDashboard';
 import { ToastContainer } from 'react-toastify';
 
@@ -26,6 +27,7 @@ function App() {
           path="/"
           element={<HomePage />}
         />
+        <Route path="/ad/:adId" element={<AdDetailsPage />} />
         <Route
           path="/profile"
           element={<ProfilePage />}

@@ -9,6 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/cart")
@@ -39,6 +42,13 @@ public class CartController {
     public ResponseEntity<?> removeFromCart(@PathVariable Long productId) {
         cartService.removeFromCart(productId);
         return ResponseEntity.ok("Product removed from cart.");
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> getCartCount() {
+        Map<String, Integer> response = new HashMap<>();
+        response.put("count", cartService.getCartItems().size());
+        return ResponseEntity.ok(response);
     }
 }
 

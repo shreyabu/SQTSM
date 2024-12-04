@@ -17,13 +17,32 @@ function ProfilePage() {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
+    // Fetch user info from the backend
     useEffect(() => {
-        const storedUser = localStorage.getItem('loggedInUser');
-        if (storedUser) {
-            const userData = JSON.parse(storedUser);
-            setUser(userData);
-            setUpdatedPreferences(userData.preferences || []);
-        }
+        const fetchUser = async () => {
+            if (!token) {
+                toast.error('Authentication token is missing');
+                return;
+            }
+
+            try {
+                const response = await api.get('/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                const updatedUser = response.data;
+                localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
+                setUser(updatedUser);
+                setUpdatedPreferences(updatedUser.preferences || []);
+            } catch (error) {
+                toast.error('Failed to fetch user data.');
+                console.error(error);
+            }
+        };
+
+        fetchUser();
     }, []);
 
     const fetchPreferences = () => {
@@ -49,7 +68,6 @@ function ProfilePage() {
     };
 
     const fetchOrders = (page) => {
-
         if (!token) {
             toast.error('Authentication token is missing');
             return;
@@ -100,18 +118,21 @@ function ProfilePage() {
     };
 
     const handleSavePreferences = () => {
-        const token = localStorage.getItem('token');
         if (!token) {
             toast.error('Authentication token is missing');
+            return;
+        }
+    
+        // 检查 updatedPreferences 是否为空
+        if (!updatedPreferences || updatedPreferences.length === 0) {
+            toast.error('Please select at least one preference.');
             return;
         }
 
         api
             .put(
                 '/user/editPreferences',
-                {
-                    preferences: updatedPreferences,
-                },
+                { preferences: updatedPreferences }, // 确保数据结构正确
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -119,20 +140,23 @@ function ProfilePage() {
                 }
             )
             .then(() => {
-                toast.success('Preferences updated');
+                toast.success('Preferences updated successfully.');
+    
                 const updatedUser = {
                     ...user,
                     preferences: updatedPreferences,
                 };
                 localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
                 setUser(updatedUser);
+                setPreferences(updatedPreferences); // 确保 preferences 状态更新
                 setShowPreferenceModal(false);
             })
             .catch((error) => {
                 toast.error('Failed to update preferences.');
-                console.error(error);
+                console.error('Error updating preferences:', error);
             });
     };
+    
 
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');

@@ -2,9 +2,8 @@ package org.lei.personalized_advertisement_system.service.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.lei.personalized_advertisement_system.DTO.UserDetailsDTO;
-import org.lei.personalized_advertisement_system.entity.Product;
 import org.lei.personalized_advertisement_system.entity.User;
-import org.lei.personalized_advertisement_system.enums.Role;
+import org.lei.personalized_advertisement_system.repository.CartRepository;
 import org.lei.personalized_advertisement_system.repository.UserRepository;
 import org.lei.personalized_advertisement_system.service.UserService;
 import org.lei.personalized_advertisement_system.util.JwtUtil;
@@ -28,6 +27,9 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -107,10 +109,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserPreferences(Set<String> preferences) {
         User user = getCurrentUser();
-        if (user.getPreferences() != null && !user.getPreferences().isEmpty()) {
-            preferences.addAll(StringToListUtil.toList(user.getPreferences()));
-        }
-        System.out.println(preferences);
         user.setPreferences(String.join(",", preferences));
         userRepository.save(user);
     }
@@ -139,6 +137,7 @@ public class UserServiceImpl implements UserService {
         userDetailsDTO.setUsername(user.getUsername());
         userDetailsDTO.setRole(user.getRole());
         userDetailsDTO.setPreferences(StringToListUtil.toList(user.getPreferences()));
+        userDetailsDTO.setCartCount(cartRepository.findByUserId(user.getId()).size());
         return userDetailsDTO;
     }
 }

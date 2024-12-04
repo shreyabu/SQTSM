@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO createOrder() {
+        User currentUser = userService.getCurrentUser();
         List<CartDTO> cartItems = cartService.getCartItems();
         if (cartItems.isEmpty()) {
             throw new RuntimeException("Cart is empty.");
@@ -57,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         }
         String orderNumber = generateOrderNumber();
         order.setOrderNumber(orderNumber);
-        order.setUser(userService.getCurrentUser());
+        order.setUser(currentUser);
         order.setTotalPrice(totalPrice);
         order.setItems(orderItems);
 
@@ -68,6 +69,7 @@ public class OrderServiceImpl implements OrderService {
                 preferences.addAll(StringToListUtil.toList(product.getCategories()));
             }
         }
+        preferences.addAll(StringToListUtil.toList(currentUser.getPreferences()));
         userService.updateUserPreferences(preferences);
         cartService.clearCart();
 

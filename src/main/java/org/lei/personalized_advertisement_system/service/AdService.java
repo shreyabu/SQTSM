@@ -53,4 +53,6 @@ public interface AdService {
      * @return 最受欢迎广告列表
      */
     List<AdDTO> getPopularAds();
+
+    void incrementAdClicks(Long adId);
 }
