@@ -26,5 +26,10 @@ public class OrderController {
                                                     @RequestParam("size") Integer size) {
         return ResponseEntity.ok(orderService.getOrders(page, size));
     }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable("orderNumber") String orderNumber) {
+        return ResponseEntity.ok(orderService.getOrderByOrderNumber(orderNumber));
+    }
 }
 

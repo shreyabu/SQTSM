@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import Pagination from './Pagination';
 
 function OrderList({ orders, currentPage, totalPages, onPageChange, isAdmin }) {
+    const navigate = useNavigate();
+
     return (
         <div className="flex flex-col justify-between min-h-[480px]">
             <div>
@@ -25,7 +28,12 @@ function OrderList({ orders, currentPage, totalPages, onPageChange, isAdmin }) {
 
                             return (
                                 <tr key={order.orderNumber}>
-                                    <td className="border px-4 py-2">{order.orderNumber}</td>
+                                    <td
+                                        className="border px-4 py-2 text-blue-500 hover:underline cursor-pointer"
+                                        onClick={() => navigate(`/orders/${order.orderNumber}`)}
+                                    >
+                                        {order.orderNumber}
+                                    </td>
                                     {isAdmin && <td className="border px-4 py-2">{order.username}</td>}
                                     <td className="border px-4 py-2">{totalItems}</td>
                                     <td className="border px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>

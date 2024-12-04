@@ -89,6 +89,15 @@ public class OrderServiceImpl implements OrderService {
         return orderPage.map(this::convertToOrderDTO);
     }
 
+    @Override
+    public OrderDTO getOrderByOrderNumber(String orderNumber) {
+        Order order = orderRepository.findByOrderNumber(orderNumber).orElseThrow(() -> new RuntimeException("Order not found."));
+        if (!order.getUser().getId().equals(userService.getCurrentUser().getId())) {
+            throw new RuntimeException("You can not access this order.");
+        }
+        return convertToOrderDTO(order);
+    }
+
 
     public OrderDTO convertToOrderDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import OrderManagement from './OrderManagement'; // Order 管理界面组件
-import ProductManagement from './ProductManagement'; // Product 管理界面组件
-import AdsManagement from './AdsManagement'; // Ads 管理界面组件
-import PromotionManagement from './PromotionManagement'; // 促销活动管理界面组件
+import OrderManagement from './OrderManagement';
+import ProductManagement from './ProductManagement';
+import AdsManagement from './AdsManagement';
 import Layout from '../components/Layout';
 
 function AdminDashboard() {
-    const [selectedPage, setSelectedPage] = useState('Order'); // 默认显示 Order 页面
+    const [selectedPage, setSelectedPage] = useState('Order');
     const navigate = useNavigate();
 
     const handlePageChange = (e) => {
@@ -25,7 +24,6 @@ function AdminDashboard() {
     return (
         <Layout>
             <div className="p-8 flex-grow flex flex-col">
-                {/* Header */}
                 <header className="mb-8 flex justify-between items-center">
                     <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                     <select
@@ -49,13 +47,11 @@ function AdminDashboard() {
                         Log out
                     </button>
                 </div>
-                {/* Main Content */}
                 <main className="p-8">
                     <div className="min-h-[80vh]">
                         {selectedPage === 'Order' && <OrderManagement />}
                         {selectedPage === 'Product' && <ProductManagement />}
                         {selectedPage === 'Ads' && <AdsManagement />}
-                        {selectedPage === 'Promotion' && <PromotionManagement />}
                     </div>
                 </main>
             </div>

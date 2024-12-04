@@ -122,7 +122,7 @@ function ProfilePage() {
             toast.error('Authentication token is missing');
             return;
         }
-    
+
         // 检查 updatedPreferences 是否为空
         if (!updatedPreferences || updatedPreferences.length === 0) {
             toast.error('Please select at least one preference.');
@@ -141,7 +141,7 @@ function ProfilePage() {
             )
             .then(() => {
                 toast.success('Preferences updated successfully.');
-    
+
                 const updatedUser = {
                     ...user,
                     preferences: updatedPreferences,
@@ -156,7 +156,7 @@ function ProfilePage() {
                 console.error('Error updating preferences:', error);
             });
     };
-    
+
 
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
@@ -188,8 +188,21 @@ function ProfilePage() {
                         {user && (
                             <div className="mb-8">
                                 <div className="mt-4">
-                                    <label className="block font-medium">My Preferences:</label>
-                                    <p>{user.preferences.join(',') || 'No preferences set'}</p>
+                                    <label className="block font-medium mb-2">My Preferences:</label>
+                                    <div className="flex flex-wrap gap-2">
+                                        {user.preferences.length > 0 ? (
+                                            user.preferences.map((preference, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="px-3 py-1 text-sm font-medium text-white bg-blue-400 rounded-full"
+                                                >
+                                                    {preference}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <p className="text-gray-500">No preferences set</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="flex items-center mt-6 space-x-2">
@@ -203,6 +216,7 @@ function ProfilePage() {
                                 </div>
                             </div>
                         )}
+
                         <h2 className="text-xl font-semibold mb-4">Order History</h2>
                         <OrderList
                             orders={orders}
