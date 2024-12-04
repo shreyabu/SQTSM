@@ -10,4 +10,5 @@ public class UserDetailsDTO {
     private String username;
     private Role role;
     private List<String> preferences;
+    private Integer cartCount;
 }

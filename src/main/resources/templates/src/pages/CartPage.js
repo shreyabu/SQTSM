@@ -106,7 +106,7 @@ function CartPage() {
 
             if (response.status === 201 || response.status === 200) {
                 toast.success('Order created successfully!');
-                fetchCartItems(currentPage); // Refresh the cart
+                fetchCartItems(currentPage);
             }
         } catch (error) {
             console.error('Failed to create order:', error);

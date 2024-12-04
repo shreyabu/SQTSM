@@ -3,13 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
     const [user, setUser] = useState(null);
-
+    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         const storedUser = localStorage.getItem('loggedInUser');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
         }
     }, []);
 
@@ -28,12 +29,17 @@ function Navbar() {
             </div>
             <div className="flex space-x-4 items-center">
                 {user ? (
-                    <div
-                        onClick={handleProfileClick}
-                        className="flex items-center cursor-pointer hover:bg-gray-200 px-2 py-1 rounded-md transition duration-200"
-                    >
-                        <span className="text-gray-700">Hello, {user.username}</span>
-                    </div>
+                    <>
+                        <div
+                            onClick={handleProfileClick}
+                            className="flex items-center cursor-pointer hover:bg-gray-200 px-2 py-1 rounded-md transition duration-200"
+                        >
+                            <span className="text-gray-700">Hello, {user.username}</span>
+                        </div>
+                        <Link to="/cart" className="text-blue-500 hover:underline">
+                            <i className="fas fa-shopping-cart"></i> Cart
+                        </Link>
+                    </>
                 ) : (
                     <div className="space-x-2">
                         <Link to="/login" className="text-blue-500 hover:underline">
@@ -45,10 +51,6 @@ function Navbar() {
                         </Link>
                     </div>
                 )}
-                <Link to="/cart" className="text-blue-500 hover:underline">
-                    <i className="fas fa-shopping-cart"></i> Cart (0)
-                </Link>
-
             </div>
         </nav>
     );
