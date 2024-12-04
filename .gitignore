@@ -1,5 +1,5 @@
 # Maven target directory
-/target
+/target/
 
 # IntelliJ IDEA configuration files
 /.idea/
@@ -19,3 +19,5 @@ Thumbs.db
 # Maven Wrapper files
 /mvnw
 /mvnw.cmd
+
+HELP.md
