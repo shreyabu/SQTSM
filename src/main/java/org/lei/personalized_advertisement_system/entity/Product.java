@@ -25,7 +25,7 @@ public class Product {
 
     private String image;
 
-    @Lob
+    @Column(length = 500)
     private String categories;
 
     private Integer sales = 0;
