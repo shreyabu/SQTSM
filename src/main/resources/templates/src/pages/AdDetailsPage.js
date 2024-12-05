@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../api/api';
 import Layout from '../components/Layout';
-import ProductCard from '../components/ProductCard';
+import ProductList from '../components/ProductList';
 import { toast } from 'react-toastify';
 
 function AdDetailsPage({ updateCartCount }) {
@@ -74,15 +74,7 @@ function AdDetailsPage({ updateCartCount }) {
 
         <section>
           <h2 className="text-3xl font-bold mb-4">Related Products</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                handleAddToCart={handleAddToCart}
-              />
-            ))}
-          </div>
+          <ProductList products={products} handleAddToCart={handleAddToCart} />
         </section>
       </main>
     </Layout>

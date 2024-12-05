@@ -36,7 +36,7 @@ public class SecurityConfig {
                 // Authorize requests configuration
                 .authorizeHttpRequests(auth -> auth
                         // Permit all requests to certain URLs without authentication
-                        .requestMatchers(HttpMethod.GET, "/", "/categories", "/ad/click/{id}", "/ad/{id}", "/product/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/home/*", "/categories", "/ad/click/{id}", "/ad/{id}", "/product/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/ad/click/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

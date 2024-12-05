@@ -19,9 +19,9 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    List<ProductDTO> getRecommendedProducts(String username);
-
     List<ProductDTO> getPopularProducts();
+
+    List<ProductDTO> getRecommendedProducts(String username);
 
     Product getProductById(Long id);
 

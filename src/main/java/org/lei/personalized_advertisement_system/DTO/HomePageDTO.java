@@ -2,6 +2,7 @@ package org.lei.personalized_advertisement_system.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -9,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 public class HomePageDTO {
     private List<AdDTO> ads;
-    private List<ProductDTO> products;
+    private Page<ProductDTO> products;
     private String message;
 }

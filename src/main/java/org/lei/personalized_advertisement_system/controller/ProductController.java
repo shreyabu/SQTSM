@@ -30,11 +30,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.convertToProductDTO((productService.getProductById(id))));
     }
 
-    @GetMapping("/recommended")
-    public List<ProductDTO> getRecommendedProducts(@RequestParam String username) {
-        return productService.getRecommendedProducts(username);
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductCreateDTO product) {

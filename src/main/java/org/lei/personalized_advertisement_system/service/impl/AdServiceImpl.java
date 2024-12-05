@@ -111,7 +111,7 @@ public class AdServiceImpl implements AdService {
                     .toList();
 
             List<AdDTO> additionalAds = adRepository.findAll().stream()
-                    .filter(ad -> !existingAdIds.contains(ad.getId())) // 排除已推荐的广告
+                    .filter(ad -> !existingAdIds.contains(ad.getId()))
                     .limit(adsToAdd)
                     .map(this::mapToDTO)
                     .toList();
