@@ -17,13 +17,13 @@ function AdminDashboard() {
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/');
         toast.success('Logged out successfully!');
     };
 
     return (
         <Layout>
-            <div className="p-8 flex-grow flex flex-col">
+            <div className="p-8">
                 <header className="mb-8 flex justify-between items-center">
                     <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                     <select
@@ -34,7 +34,6 @@ function AdminDashboard() {
                         <option value="Order">Order Management</option>
                         <option value="Product">Product Management</option>
                         <option value="Ads">Ads Management</option>
-                        <option value="Promotion">Promotion Management</option>
                     </select>
                 </header>
 

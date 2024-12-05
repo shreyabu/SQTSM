@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignUpPage from './pages/SignUpPage';
+import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import CartPage from './pages/CartPage';
@@ -12,14 +12,13 @@ import OrderDetailsPage from './pages/OrderDetailsPage';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <Router>
       <Routes>
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/" /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />}
+          element={<LoginPage />}
         />
         <Route
           path="/signup"

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
     const [user, setUser] = useState(null);
-    const [cartCount, setCartCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {

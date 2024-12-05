@@ -46,12 +46,14 @@ function ProductDetailsPage() {
   return (
     <Layout>
       <main className="p-8">
-        <div className="flex space-x-8">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-1/2 h-auto object-cover rounded-md"
-          />
+        <div className="flex space-x-8 items-start">
+          <div className="w-1/3 max-w-[500px] overflow-hidden mx-auto">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-contain rounded-md"
+            />
+          </div>
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
             <p className="text-lg text-gray-600 mb-4">{product.description}</p>

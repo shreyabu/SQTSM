@@ -1,24 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../api/api';
 
-function LoginPage({ setIsAuthenticated }) {
+function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem('loggedInUser') != null) {
+      navigate('/');
+    }
+  })
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await api.post('/auth/login', {
         username,
         password,
       });
-  
-      const {user, token} = response.data;
-      setIsAuthenticated(true);
+
+      const { user, token } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('loggedInUser', JSON.stringify(user));
       console.log(localStorage.getItem('loggedInUser'));

@@ -8,7 +8,6 @@ import OrderList from '../components/OrderList';
 function ProfilePage() {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
-    const [preferences, setPreferences] = useState([]);
     const [updatedPreferences, setUpdatedPreferences] = useState([]);
     const [showPreferenceModal, setShowPreferenceModal] = useState(false);
     const [allCategories, setAllCategories] = useState([]);
@@ -17,14 +16,12 @@ function ProfilePage() {
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
-    // Fetch user info from the backend
     useEffect(() => {
+        if (!token) {
+            toast.error('Authentication token is missing');
+            return;
+        }
         const fetchUser = async () => {
-            if (!token) {
-                toast.error('Authentication token is missing');
-                return;
-            }
-
             try {
                 const response = await api.get('/user', {
                     headers: {
@@ -42,62 +39,47 @@ function ProfilePage() {
             }
         };
 
-        fetchUser();
-    }, []);
+        const fetchPreferences = () => {
+            api
+                .get('/user/getPreferences', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    setUpdatedPreferences(response.data);
+                })
+                .catch((error) => {
+                    toast.error('Failed to fetch preferences');
+                    console.error(error);
+                });
+        };
 
-    const fetchPreferences = () => {
-        if (!token) {
-            toast.error('Authentication token is missing');
-            return;
-        }
-
-        api
-            .get('/user/getPreferences', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                setPreferences(response.data);
-                setUpdatedPreferences(response.data);
-            })
-            .catch((error) => {
-                toast.error('Failed to fetch preferences');
-                console.error(error);
-            });
-    };
-
-    const fetchOrders = (page) => {
-        if (!token) {
-            toast.error('Authentication token is missing');
-            return;
-        }
-
-        api
-            .get('/order', {
-                params: {
-                    page,
-                    size: 8,
-                },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                setOrders(response.data.content);
-                setTotalPages(response.data.totalPages);
-                setCurrentPage(response.data.number);
-            })
-            .catch((error) => {
-                toast.error('Failed to fetch orders');
-                console.error(error);
-            });
-    };
-
-    useEffect(() => {
+        const fetchOrders = (page) => {
+            api
+                .get('/order', {
+                    params: {
+                        page,
+                        size: 8,
+                    },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    setOrders(response.data.content);
+                    setTotalPages(response.data.totalPages);
+                    setCurrentPage(response.data.number);
+                })
+                .catch((error) => {
+                    toast.error('Failed to fetch orders');
+                    console.error(error);
+                });
+        };
         fetchPreferences();
         fetchOrders(currentPage);
-    }, [currentPage]);
+        fetchUser();
+    }, [currentPage, token]);
 
     const handlePageChange = (page) => {
         if (page >= 0 && page < totalPages) {
@@ -123,7 +105,6 @@ function ProfilePage() {
             return;
         }
 
-        // 检查 updatedPreferences 是否为空
         if (!updatedPreferences || updatedPreferences.length === 0) {
             toast.error('Please select at least one preference.');
             return;
@@ -132,7 +113,7 @@ function ProfilePage() {
         api
             .put(
                 '/user/editPreferences',
-                { preferences: updatedPreferences }, // 确保数据结构正确
+                { preferences: updatedPreferences },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -148,7 +129,6 @@ function ProfilePage() {
                 };
                 localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
                 setUser(updatedUser);
-                setPreferences(updatedPreferences); // 确保 preferences 状态更新
                 setShowPreferenceModal(false);
             })
             .catch((error) => {
@@ -161,7 +141,7 @@ function ProfilePage() {
     const handleLogout = () => {
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/');
         toast.success('Logged out successfully!');
     };
 
