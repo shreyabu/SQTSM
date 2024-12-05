@@ -10,13 +10,13 @@ function ProductCard({ product, handleAddToCart }) {
 
   return (
     <div
-      className="relative border p-4 h-80 rounded-lg shadow-md cursor-pointer"
+      className="relative border p-4 h-150 rounded-lg shadow-md cursor-pointer"
       onClick={handleCardClick}
     >
       <img
         src={product.image}
         alt={product.name}
-        className="w-full h-40 object-cover rounded-md mb-4"
+        className="w-full h-80 object-cover rounded-md mb-4"
       />
 
       <h3 className="text-lg font-semibold text-blue-500 hover:underline">

@@ -35,6 +35,7 @@ public class HomeController {
             if (username != null) {
                 ads = adService.getRecommendedAds();
                 products = productService.getRecommendedProducts(username);
+                System.out.println(products);
                 return ResponseEntity.ok(new HomePageDTO(ads, products, "Welcome back, " + username + "!"));
             }
         }

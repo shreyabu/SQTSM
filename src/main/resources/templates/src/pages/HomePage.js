@@ -14,14 +14,26 @@ function HomePage() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('loggedInUser');
+    let token = null;
+  
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const user = JSON.parse(storedUser);
+      setUser(user);
+      token = localStorage.getItem('token');
     }
-
+  
+    const config = token
+      ? {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      : {};
+  
     api
-      .get('/')
+      .get('/', config)
       .then((response) => {
-        const { ads, products } = response.data;
+        const { ads, products, message } = response.data;
         setAds(ads);
         setProducts(products);
       })
@@ -30,6 +42,7 @@ function HomePage() {
         console.error('Failed to fetch home page data:', error);
       });
   }, []);
+  
 
   const sliderSettings = {
     dots: true,

@@ -69,23 +69,41 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getRecommendedProducts(String username) {
         List<String> preferences = userService.getPreferencesByUsername(username);
 
+        List<ProductDTO> recommendedProducts;
         if (preferences == null || preferences.isEmpty()) {
-            return productRepository.findTop12ByOrderBySalesDesc().stream()
+            recommendedProducts = productRepository.findTop12ByOrderBySalesDesc().stream()
+                    .map(this::convertToProductDTO)
+                    .collect(Collectors.toList());
+        } else {
+            recommendedProducts = productRepository.findAll().stream()
+                    .filter(product -> preferences.stream().anyMatch(product.getCategories()::contains))
                     .map(this::convertToProductDTO)
                     .collect(Collectors.toList());
         }
 
-        return productRepository.findAll().stream()
-                .filter(product -> preferences.stream().anyMatch(product.getCategories()::contains))
-                .map(this::convertToProductDTO)
-                .collect(Collectors.toList());
+        if (recommendedProducts.size() < 12) {
+            int productsToAdd = 12 - recommendedProducts.size();
+
+            List<Long> existingProductIds = recommendedProducts.stream()
+                    .map(ProductDTO::getId)
+                    .toList();
+            List<ProductDTO> additionalProducts = productRepository.findAll().stream()
+                    .filter(product -> !existingProductIds.contains(product.getId()))
+                    .limit(productsToAdd)
+                    .map(this::convertToProductDTO)
+                    .toList();
+
+            recommendedProducts.addAll(additionalProducts);
+        }
+
+        return recommendedProducts;
     }
+
 
     @Override
     public List<ProductDTO> getPopularProducts() {
         List<Product> popularProducts = productRepository.findTop12ByOrderBySalesDesc();
 
-        // 转换为 DTO 列表返回
         return popularProducts.stream()
                 .map(this::convertToProductDTO)
                 .toList();
