@@ -3,25 +3,25 @@ import api from '../api/api';
 import Slider from 'react-slick';
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function HomePage() {
   const [ads, setAds] = useState([]);
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('loggedInUser');
     let token = null;
-  
+
     if (storedUser) {
       const user = JSON.parse(storedUser);
       setUser(user);
       token = localStorage.getItem('token');
     }
-  
+
     const config = token
       ? {
           headers: {
@@ -29,20 +29,34 @@ function HomePage() {
           },
         }
       : {};
-  
+
     api
       .get('/', config)
       .then((response) => {
-        const { ads, products, message } = response.data;
+        const { ads, products, totalPages } = response.data;
         setAds(ads);
         setProducts(products);
+        setTotalPages(totalPages);
       })
       .catch((error) => {
         toast.error('Failed to load data. Please try again.');
         console.error('Failed to fetch home page data:', error);
       });
   }, []);
-  
+
+  const loadMoreProducts = () => {
+    const nextPage = currentPage + 1;
+    api
+      .get(`/products?page=${nextPage}`)
+      .then((response) => {
+        setProducts([...products, ...response.data.content]);
+        setCurrentPage(nextPage);
+      })
+      .catch((error) => {
+        console.error('Failed to load more products:', error);
+        toast.error('Failed to load more products.');
+      });
+  };
 
   const sliderSettings = {
     dots: true,
@@ -64,7 +78,7 @@ function HomePage() {
         console.error('Failed to update ad click count:', error);
         toast.error('Failed to register ad click.');
       });
-    navigate(`/ad/${adId}`);
+    window.open(`/ad/${adId}`, '_blank');
   };
 
   const handleAddToCart = (productId) => {
@@ -91,7 +105,6 @@ function HomePage() {
   return (
     <Layout>
       <main className="p-8">
-        {/* Advertisement Section */}
         <section className="mb-8">
           <Slider {...sliderSettings}>
             {ads.map((ad) => (
@@ -115,7 +128,10 @@ function HomePage() {
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold mb-4">Picked For You</h2>
+          <h2 className="text-3xl font-bold mb-4">Picked For You!</h2>
+          <p className="text-gray-500 mb-4">
+            Check out products we picked just for you!
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard
@@ -125,6 +141,16 @@ function HomePage() {
               />
             ))}
           </div>
+          {currentPage < totalPages - 1 && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={loadMoreProducts}
+                className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-200"
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </section>
       </main>
     </Layout>

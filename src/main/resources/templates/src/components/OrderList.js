@@ -9,46 +9,58 @@ function OrderList({ orders, currentPage, totalPages, onPageChange, isAdmin }) {
     return (
         <div className="flex flex-col justify-between min-h-[480px]">
             <div>
-                <table className="w-full border-collapse border border-gray-200 text-center">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="border px-4 py-2">ORDER</th>
-                            {isAdmin && <th className="border px-4 py-2">USER</th>}
-                            <th className="border px-4 py-2">ITEMS NUMBER</th>
-                            <th className="border px-4 py-2">DATE</th>
-                            <th className="border px-4 py-2">TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orders.map((order) => {
-                            const totalItems = order.items.reduce(
-                                (sum, item) => sum + item.quantity,
-                                0
-                            );
+                {orders.length > 0 ? (
+                    <table className="w-full border-collapse border border-gray-200 text-center">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="border px-4 py-2">ORDER</th>
+                                {isAdmin && <th className="border px-4 py-2">USER</th>}
+                                <th className="border px-4 py-2">ITEMS NUMBER</th>
+                                <th className="border px-4 py-2">DATE</th>
+                                <th className="border px-4 py-2">TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map((order) => {
+                                const totalItems = order.items.reduce(
+                                    (sum, item) => sum + item.quantity,
+                                    0
+                                );
 
-                            return (
-                                <tr key={order.orderNumber}>
-                                    <td
-                                        className="border px-4 py-2 text-blue-500 hover:underline cursor-pointer"
-                                        onClick={() => navigate(`/orders/${order.orderNumber}`)}
-                                    >
-                                        {order.orderNumber}
-                                    </td>
-                                    {isAdmin && <td className="border px-4 py-2">{order.username}</td>}
-                                    <td className="border px-4 py-2">{totalItems}</td>
-                                    <td className="border px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
-                                    <td className="border px-4 py-2">${order.totalPrice.toFixed(2)}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                return (
+                                    <tr key={order.orderNumber}>
+                                        <td
+                                            className="border px-4 py-2 text-blue-500 hover:underline cursor-pointer"
+                                            onClick={() => navigate(`/orders/${order.orderNumber}`)}
+                                        >
+                                            {order.orderNumber}
+                                        </td>
+                                        {isAdmin && <td className="border px-4 py-2">{order.username}</td>}
+                                        <td className="border px-4 py-2">{totalItems}</td>
+                                        <td className="border px-4 py-2">
+                                            {new Date(order.createdAt).toLocaleDateString()}
+                                        </td>
+                                        <td className="border px-4 py-2">
+                                            ${order.totalPrice.toFixed(2)}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                ) : (
+                    <div className="text-center text-gray-500 py-8">
+                        No orders.
+                    </div>
+                )}
             </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={onPageChange}
-            />
+            {orders.length > 0 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={onPageChange}
+                />
+            )}
         </div>
     );
 }
