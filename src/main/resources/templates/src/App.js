@@ -7,6 +7,8 @@ import ProfilePage from './pages/ProfilePage';
 import CartPage from './pages/CartPage';
 import AdDetailsPage from './pages/AdDetailsPage';
 import AdminDashboard from './pages/AdminDashboard';
+import ProductDetailsPage from './pages/ProductDetailsPage';
+import OrderDetailsPage from './pages/OrderDetailsPage';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -32,10 +34,12 @@ function App() {
           path="/profile"
           element={<ProfilePage />}
         />
+        <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route
           path="/cart"
           element={<CartPage />}
         />
+        <Route path="/orders/:orderNumber" element={<OrderDetailsPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <ToastContainer

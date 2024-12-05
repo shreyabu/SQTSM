@@ -94,14 +94,34 @@ public class AdServiceImpl implements AdService {
     @Override
     public List<AdDTO> getRecommendedAds() {
         List<String> userPreferences = userService.getPreferencesByUsername(userService.getCurrentUser().getUsername());
-        return adRepository.findAll().stream()
+
+        List<AdDTO> recommendedAds = adRepository.findAll().stream()
                 .filter(ad -> {
                     List<String> adCategories = StringToListUtil.toList(ad.getCategories());
                     return userPreferences.stream().anyMatch(adCategories::contains);
                 })
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+
+        if (recommendedAds.size() < 5) {
+            int adsToAdd = 5 - recommendedAds.size();
+
+            List<Long> existingAdIds = recommendedAds.stream()
+                    .map(AdDTO::getId)
+                    .toList();
+
+            List<AdDTO> additionalAds = adRepository.findAll().stream()
+                    .filter(ad -> !existingAdIds.contains(ad.getId())) // 排除已推荐的广告
+                    .limit(adsToAdd)
+                    .map(this::mapToDTO)
+                    .toList();
+
+            recommendedAds.addAll(additionalAds);
+        }
+
+        return recommendedAds;
     }
+
 
     @Override
     public List<AdDTO> getPopularAds() {

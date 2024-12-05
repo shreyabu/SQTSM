@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api from '../api/api';
-import CategorySelect from '../components/CategorySelect';
 
 function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -10,6 +9,7 @@ function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [preferences, setPreferences] = useState([]);
   const [selectedPreferences, setSelectedPreferences] = useState([]);
+  const [errors, setErrors] = useState({}); // 用于存储错误信息
 
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ function SignUpPage() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match.');
+      setErrors({ confirmPassword: 'Passwords do not match.' });
       return;
     }
 
@@ -48,12 +48,15 @@ function SignUpPage() {
         localStorage.setItem('loggedInUser', JSON.stringify(user));
         localStorage.setItem('token', token);
 
-        toast.success(`Welcom to join us ${user.username}`);
+        toast.success(`Welcome to join us ${user.username}`);
         navigate('/'); // Redirect to home page
       }
     } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || 'Registration failed. Please try again.');
+      if (error.response?.status === 400 && error.response.data) {
+        setErrors(error.response.data);
+      } else {
+        toast.error(error.response.data.error);
+      }
     }
   };
 
@@ -80,8 +83,16 @@ function SignUpPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`w-full px-3 py-2 mt-1 text-gray-900 border ${
+                errors.username ? 'border-red-500' : 'border-gray-300'
+              } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Username must be 3-10 characters and contain no special characters.
+            </p>
+            {errors.username && (
+              <p className="text-xs text-red-500 mt-1">{errors.username}</p>
+            )}
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
@@ -92,8 +103,16 @@ function SignUpPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`w-full px-3 py-2 mt-1 text-gray-900 border ${
+                errors.password ? 'border-red-500' : 'border-gray-300'
+              } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Password must be 6-12 characters and contain no special characters.
+            </p>
+            {errors.password && (
+              <p className="text-xs text-red-500 mt-1">{errors.password}</p>
+            )}
           </div>
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
@@ -104,8 +123,13 @@ function SignUpPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className={`w-full px-3 py-2 mt-1 text-gray-900 border ${
+                errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+              } rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
             />
+            {errors.confirmPassword && (
+              <p className="text-xs text-red-500 mt-1">{errors.confirmPassword}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Preferences</label>

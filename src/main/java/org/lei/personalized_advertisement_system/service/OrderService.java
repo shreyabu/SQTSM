@@ -8,4 +8,5 @@ import java.util.List;
 public interface OrderService {
     OrderDTO createOrder();
     Page<OrderDTO> getOrders(int page, int size);
+    OrderDTO getOrderByOrderNumber(String orderNumber);
 }

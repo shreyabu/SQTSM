@@ -7,13 +7,13 @@ function Footer() {
       <div className="flex justify-between items-center">
         <div>
           <div className="flex space-x-4">
-            <Link to="/privacy" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-blue-500 hover:underline">
               Privacy Policy
             </Link>
-            <Link to="/terms" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-blue-500 hover:underline">
               Terms of Service
             </Link>
-            <Link to="/contact" className="text-blue-500 hover:underline">
+            <Link to="/" className="text-blue-500 hover:underline">
               Contact Us
             </Link>
           </div>

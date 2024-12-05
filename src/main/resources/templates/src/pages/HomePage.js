@@ -14,14 +14,26 @@ function HomePage() {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('loggedInUser');
+    let token = null;
+  
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const user = JSON.parse(storedUser);
+      setUser(user);
+      token = localStorage.getItem('token');
     }
-
+  
+    const config = token
+      ? {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      : {};
+  
     api
-      .get('/')
+      .get('/', config)
       .then((response) => {
-        const { ads, products } = response.data;
+        const { ads, products, message } = response.data;
         setAds(ads);
         setProducts(products);
       })
@@ -30,6 +42,7 @@ function HomePage() {
         console.error('Failed to fetch home page data:', error);
       });
   }, []);
+  
 
   const sliderSettings = {
     dots: true,
@@ -101,7 +114,6 @@ function HomePage() {
           </Slider>
         </section>
 
-        {/* Products Section */}
         <section>
           <h2 className="text-3xl font-bold mb-4">Picked For You</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<?> handleExceptions(Exception e) {
         // Return a structured error message
-        return ResponseEntity.badRequest().body(new ErrorDTO(e.getMessage()));
+        return ResponseEntity.internalServerError().body(new ErrorDTO(e.getMessage()));
     }
 }
 
