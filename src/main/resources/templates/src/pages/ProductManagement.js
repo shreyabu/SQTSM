@@ -128,8 +128,12 @@ function ProductManagement() {
 
             {/* Edit Product Modal */}
             {editingProduct && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-md shadow-lg w-[500px]">
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto"
+                >
+                    <div
+                        className="bg-white p-6 rounded-md shadow-lg w-[500px] max-h-[90vh] overflow-y-auto"
+                    >
                         <h2 className="text-lg font-bold mb-4">
                             {editingProduct.id ? 'Edit Product' : 'Add Product'}
                         </h2>
@@ -200,13 +204,6 @@ function ProductManagement() {
                                         setEditingProduct({ ...editingProduct, image: url })
                                     }
                                 />
-                                {editingProduct.image && (
-                                    <img
-                                        src={editingProduct.image}
-                                        alt="Current"
-                                        className="w-32 h-32 object-cover rounded-md mt-2"
-                                    />
-                                )}
                             </div>
                             <div className="flex justify-end space-x-2">
                                 <button
@@ -227,6 +224,7 @@ function ProductManagement() {
                     </div>
                 </div>
             )}
+
         </div>
     );
 }

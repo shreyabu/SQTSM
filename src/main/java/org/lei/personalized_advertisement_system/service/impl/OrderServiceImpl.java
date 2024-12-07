@@ -6,6 +6,7 @@ import org.lei.personalized_advertisement_system.DTO.OrderItemDTO;
 import org.lei.personalized_advertisement_system.entity.*;
 import org.lei.personalized_advertisement_system.enums.Role;
 import org.lei.personalized_advertisement_system.repository.OrderRepository;
+import org.lei.personalized_advertisement_system.repository.ProductRepository;
 import org.lei.personalized_advertisement_system.service.CartService;
 import org.lei.personalized_advertisement_system.service.OrderService;
 import org.lei.personalized_advertisement_system.service.UserService;
@@ -32,6 +33,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
     private UserService userService;
 
     @Override
@@ -46,23 +50,38 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         List<OrderItem> orderItems = new ArrayList<>();
         List<Product> products = new ArrayList<>();
+
         for (CartDTO cart : cartItems) {
             OrderItem item = new OrderItem();
-            item.setProduct(cart.getProduct());
+            Product product = cart.getProduct();
+
+            // Update sales for the product
+            int updatedSales = product.getSales() + cart.getQuantity();
+            product.setSales(updatedSales);
+
+            item.setProduct(product);
             item.setQuantity(cart.getQuantity());
-            item.setPrice(cart.getProduct().getPrice() * cart.getQuantity());
+            item.setPrice(product.getPrice() * cart.getQuantity());
             item.setOrder(order);
             orderItems.add(item);
-            products.add(cart.getProduct());
+            products.add(product);
+
             totalPrice += item.getPrice();
         }
+
         String orderNumber = generateOrderNumber();
         order.setOrderNumber(orderNumber);
         order.setUser(currentUser);
         order.setTotalPrice(totalPrice);
         order.setItems(orderItems);
 
+        // Save the order
         orderRepository.save(order);
+
+        // Save updated product sales
+        productRepository.saveAll(products);
+
+        // Update user preferences
         Set<String> preferences = new HashSet<>();
         for (Product product : products) {
             if (product.getCategories() != null) {
@@ -71,10 +90,13 @@ public class OrderServiceImpl implements OrderService {
         }
         preferences.addAll(StringToListUtil.toList(currentUser.getPreferences()));
         userService.updateUserPreferences(preferences);
+
+        // Clear the cart
         cartService.clearCart();
 
         return convertToOrderDTO(order);
     }
+
 
     @Override
     public Page<OrderDTO> getOrders(int page, int size) {

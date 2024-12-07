@@ -55,6 +55,11 @@ function AdsManagement() {
     };
 
     useEffect(() => {
+        fetchAds(currentPage);
+        fetchProducts();
+    }, [currentPage]);
+
+    useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
             if (
@@ -68,11 +73,6 @@ function AdsManagement() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [productPage, productTotalPages]);
-
-    useEffect(() => {
-        fetchAds(currentPage);
-        fetchProducts();
-    }, [currentPage]);
 
     // Save or update ad
     const handleSaveAd = async (ad) => {
@@ -97,14 +97,13 @@ function AdsManagement() {
         }
     };
 
-    // 删除广告
     const handleDeleteAd = async (adId) => {
         try {
             await api.delete(`/ad/${adId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             toast.success('Ad deleted successfully.');
-            fetchAds(currentPage); // 重新加载广告列表
+            fetchAds(currentPage);
         } catch (error) {
             console.error('Failed to delete ad:', error);
             toast.error('Failed to delete ad.');
@@ -161,8 +160,12 @@ function AdsManagement() {
             />
 
             {editingAd && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-md shadow-lg w-[500px]">
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto"
+                >
+                    <div
+                        className="bg-white p-6 rounded-md shadow-lg w-[500px] max-h-[90vh] overflow-y-auto"
+                    >
                         <h2 className="text-lg font-bold mb-4">
                             {editingAd.id ? 'Edit Ad' : 'Add Ad'}
                         </h2>
